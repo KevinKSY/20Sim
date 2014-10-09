@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+  <Icons>
+    <Icon size="128" bpp="32" format="png">
+<![CDATA[89504e470d0a1a0a0000000d4948445200000080000000800806000000c33e61cb00000006624b474400ff00ff00ffa0bda793000000097048597300000ec400000ec401952b0e1b0000040b49444154789ceddd316ba36000c6f1a7473fc54b68972efd0219848270733697b8750c7413ba39b91d642b38768b8b5be7825070c817c8d22545fc1ab9414dd498dc956baa97e7f941e1485e9397f8efab7d87dcc566b381f0fad1f704a45f0a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c85d00d0374410d30a40eeb2fa479ee77dce437a608cd10ac04e01905300e414003905404e01905300e414003905404e01905300e414003905404e01905300e414003905404e01905300e414003905406eb00164910b630cdc280390223006a6f613a4470f86db1a7fe898e6fb6488dcfa31017687b49f7311650727d01a6b60dc080787f768b0016cbd3cc2180761ebe1d0a94e5a531a1898b187a4e3a542c7c01c2ce70d8119c36b1c18c2310152a41dcf25f0c61d11a401ccde58008987f1d168fa31f80092240130439ce7c8cb9f78563ee73da3713ad3004e080036e6cbddf83ccfb19cdbc598f0155d09249e87d09e63b93d2646f136211ce3206ccca17a2e81f75c7fb5148153a63a8b1bef5fcc3981f738ac9560f0011427d387557bc4f2ab13b0c2baf669a6afc5876fcf7f613a6abeca68fad079ccce0cf1628add6116eeab68f6e660c1af2a5cadb727348b9e1002b0e74be47e7dc680e59711241e9e8f5dbebed9f003b027b81bb51fbcc28dbd3fd4f28bdfb645ebeca781e9bc8c34cc7ec26a3d34babe3d3287b60c6f2f09001b930383ad9fe59af23a9c022eff3ca467b7d738fcd92778ff009a035204474f76d731ff3287ca07de93e2f5bdb181776ce86a8d0cd6a7a6702ac35f013e238be0769c7c7bbeac5db7bbd93757a79cd9600d7f05f86b19a2c7f2ee7f16ef5d83818f6f9a878df972b1770f325467b402544bf00cf1dec90790adb13ae9fb57f725e525e63f7146011c97bdbd74ee0d7c9d11ee263600207ceafe53afda743abc17f1fdce2880ea373084d3fa80d3c060bcb733f3f5467713d840b1e9d3daf9cb22b79c838df97dc70ad593330a6084e943799b173a8d6d582704308bb1fbd3fd445b31a32916bb5d2a8c6b73a802ecdaa3e8d3190500c0f291c7ed7bfd7257d0b770556e1e24a7bc485b3ef27c89ed1ed256b193d8dea3e8dbf64ba2f415317cf41531a200d82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c8290072facfa3c969052077b1d9680160a615809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c82900720a809c0220a700c8fd0642f72d3ae7bd4c8b0000000049454e44ae426082]]>
+     </Icon>
+  </Icons>
+  <Model version="4.4" build="4.4.1.4356">
+    <Sidops>
+<![CDATA[ExhVVLift 608 239.9 description '<Information>
+ <Description>
+    <Version>4.4</Version>
+  <LibraryPath>engine\ValveLift.emx</LibraryPath>
+<IsMainModel>1</IsMainModel>
+  <KeepParameterValues>False</KeepParameterValues>
+    <TimeStamp>2014-10-9 23:00:32</TimeStamp>
+<AllowLibraryUpdate>False</AllowLibraryUpdate>
+  <Configuration>
+   <struct>
+    <member>
+     <name>DocumentationMask</name>
+     <value>
+      <struct>
+       <member>
+        <name>MaskChoice</name>
+        <value>
+         <int>1</int>
+        </value>
+       </member>
+       <member>
+        <name>BitmapFilename</name>
+        <value>
+         <string></string>
+        </value>
+       </member>
+       <member>
+        <name>ScriptFilename</name>
+        <value>
+         <string></string>
+        </value>
+       </member>
+       <member>
+        <name>Scaling</name>
+        <value>
+         <double>1</double>
+        </value>
+       </member>
+      </struct>
+     </value>
+    </member>
+   </struct>
+  </Configuration>
+ </Description>
+</Information>'; type 'ExhVVLift-Equation'  ports   signal out lift;   signal in CA;   signal in CA_start_nom;   signal in dCA_lift_nom; end; icon bg  figures   rectangle 574.9 223.9 641.1 255.8 fill 15132390;   text 'name' 609 239.9 16;  terminals   lift 608 255.9 fixed;   CA_start_nom 576 223.9 fixed;   dCA_lift_nom 592 223.9 fixed; end; implementation eqparameters//	real CA_start_nom = 1.1;//	real dCA_lift_nom = 1;	real global lift_max;	real hidden global CA_start_ref; //Reference start CA for start of valve lift	real hidden global dCA_lift_up;	 //Lift up time (should not be changed unless file is changed	real hidden global dCA_lift_down; //Lift down time (should not be changed unless file is changed	real hidden global dCA_lift_top_ref; //Reference duration for lift upvariables	real CA_start, dCA_lift, dCA_total, CA_VV;	real phi;code	CA_start = CA_start_nom*CA_start_ref;	dCA_lift = dCA_lift_nom*dCA_lift_top_ref;		dCA_total = dCA_lift_up + dCA_lift + dCA_lift_down;	phi = CA*180/pi mod 360;	if phi > CA_start and phi < CA_start + dCA_total then		CA_VV = phi - CA_start;		if CA_VV <= dCA_lift_up then			lift = table('ExhVVProfUp.csv',CA_VV);		else 	if CA_VV <= dCA_lift_up + dCA_lift then					lift = 1;			  	else 	if CA_VV <= dCA_lift_up + dCA_lift + dCA_lift_down then							CA_VV = phi - (CA_start + dCA_lift_up + dCA_lift);							lift = table('ExhVVProfDown.csv',CA_VV);					 	else 					 		lift = 0;							end;				end;		end;	else		lift = 0;		end;				lift = lift_max*lift; implementation_end;]]>
+    </Sidops>
+  </Model>
+</Document>

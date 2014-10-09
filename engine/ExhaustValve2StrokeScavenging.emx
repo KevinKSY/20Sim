@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+  <Icons>
+    <Icon size="64" bpp="32" format="png">
+<![CDATA[89504e470d0a1a0a0000000d4948445200000040000000400806000000aa6971de00000006624b474400ff00ff00ffa0bda793000000097048597300000ec400000ec401952b0e1b0000034d49444154789ced9a31481b5118c7ff963ab8089d529d84f292a18b100b819e724b5dc4e184d2e506e9b94829dca08ba005a3e9a0431c820e39085ca8940e41c72cb9e10611856e72b94110d4668c0805335c8722156b2e57ef9ddf4bbd3fbc21dccbf7fdf3cb7def7df7921ecff3f098f584da00b56200d406a81503a03640ad1800b5016a3d7a004fc306c8e572d552a92473f002004824123f012093c938434343c75353539f070606bef38aff973ccf0b35565757ab00bca80663ec4a5194d35aada687f57ad7101ec0cd313737b7cf1b4057ad01ebebebafe6e7e7f779c6ec2a00c06f08bbbbbb2bbce2751d0000585b5bfbc82b56e85dc04f8cb1d6f6f6f6fb2073f7f6f6269bcde6b383838397954a65d06fae6ddbfd9665e9b22ce7439b8c7211648c5ddd2766ad56d3196357ede202f0344d73fedb455096e5fcd2d292e137c7719ce73c720909000054559d658cb5da5d6f341a7d3cf2080b00f8d3154629a1013c848406e0779bf3ba3b8405502e97375dd7ed6d773d954afde0914748009665e9cbcbcb9adf1c55553779e48ab4110280c3c34335c8bca3a3a3d72727272f82344292245d706982103100d7757b4746464cde71b3d9ec275eb1842c013f99a6b9c5ebdb07ba080063ac659ae696aaaab33ce346be06841563ac353636769ccd66df45713426240049922e32998c333131f185e7ed7e9722072049d2c5cdd7d7cd8ddf1edf6834fa464747ab517f7800348fc3676767c39aa639edde07ce8fbc6487a29dce0382405014e5344a00a4bb40b1584c699a56f79b53a954066766669ca83c906f83c56231757b9db82dc33092b95cae1a457e72000090cfe73ff81d7e0040a9549283b6d5ff222100a4d3e9f2f4f4b4e537c775dd5e5dd70bbc730b010000161616c63b95826ddbfdbc4b411800006018c6db20a550afd7c779e5140a403299ac0629054dd3bef1ca291400207829140a85af3cf209070008560a1b1b1bcaf9f9f970d85c4202085a0a8b8b8be1ef02ca56b8d39024a9d92ef6f5d8d9d959e9da56b893829442d85f8a850610a4146cdbee0ff3a7891ecf0bf76ff1cbcbcb84e3386fda5d4fa7d3e5500910ec64f9be794203e876095d020fa11800b5016ac500a80d502b06406d805a31006a03d48a01501ba0560c80da00b56200d406a8f5e801fc023df18688619c70540000000049454e44ae426082]]>
+     </Icon>
+  </Icons>
+  <Model version="4.4" build="4.4.1.4356">
+    <Sidops>
+<![CDATA[ExhValve 568 328 description '<Information>
+ <Description>
+    <LibraryPath>engine\ExhaustValve2StrokeScavenging.emx</LibraryPath>
+  <Version>4.4</Version>
+<IsMainModel>0</IsMainModel>
+  <KeepParameterValues>False</KeepParameterValues>
+  <AllowLibraryUpdate>True</AllowLibraryUpdate>
+  <Configuration>
+   <struct>
+    <member>
+     <name>DocumentationMask</name>
+     <value>
+      <struct>
+       <member>
+        <name>MaskChoice</name>
+        <value>
+         <int>1</int>
+        </value>
+       </member>
+       <member>
+        <name>BitmapFilename</name>
+        <value>
+         <string></string>
+        </value>
+       </member>
+       <member>
+        <name>ScriptFilename</name>
+        <value>
+         <string></string>
+        </value>
+       </member>
+       <member>
+        <name>Scaling</name>
+        <value>
+         <double>1</double>
+        </value>
+       </member>
+      </struct>
+     </value>
+    </member>
+   </struct>
+  </Configuration>
+    <TimeStamp>2014-10-9 22:54:25</TimeStamp>
+</Description>
+</Information>'; type R  ports   power in pF_in;   power out pF_out;   power in pp_in;   pseudohydraulic out pp_out;   power in pT_in;   pseudothermalh out pT_out;   signal in lift; "Crank angle starting with 0 at TDC before intake stroke"   signal in purity;   signal in Comb_state;   signal in AR;   signal boolean in inport_open;   signal boolean out open;  restrictions   causality fixed in pp_in;   causality fixed in pF_in;   causality fixed in pT_in;   causality fixed in pp_out;   causality fixed in pF_out;   causality fixed in pT_out; end; icon bg bottom  figures   text 'R' 568 328 51 bold;  terminals   pF_in 536 360 fixed;   pF_out 600 360 fixed;   pp_in 536 312 fixed;   pp_out 600 312 fixed;   pT_in 536 336 fixed;   pT_out 600 336 fixed;   lift 568 296 fixed;   open 600 296 fixed; end; implementation eqparameters	real global nstroke;   //number of stroke of the engine	real global fs;			//Stoichiometric fuel-air ratio// Thermo package	string global dll_ICE;	string dll_fcn_thdyn 	= 'thdyn_CombGasZach';	// Valve dimension	real global Dv; // Valve head diameter	real global beta; // Seat angle	real global w; // Valve seat width	real global Dp; // Inner seat diameter	real global Ds; // Stem diameter  	// Parameters for curve fit for Cd correlation   real global p1;   	real global p2;   real global p3;		real global q1;	real global q2;		real global q3;	real global Cd_corr_coeff[3];// The fit model was taken from the Sher, E. (1990). Scavenging // the two-stroke engine. Progress in Energy and Combustion Science, // 16(2), 95-124. variables	real hidden inarr_ThermoProp[3], outarr_ThermoProp[13];	real Area;	real hidden aa, pc, ksi, ksi1, ksim, ksin, ksil, p_AV, T_AV, d, a, c;	real F_AV;	real hidden h, rgas, kap;	real interesting dm, dm_b, dE;	real hidden sinb, cosb, tanb, sin2b;	real Cd, L_Dv, F0;	boolean reset;initialequations	sinb = sin(beta);	cosb = cos(beta); tanb = tan(beta);	sin2b = sin(2*beta);	reset = true;	F0 = 0.0001;code// Calculate the area of valve (from Heywood)		if Comb_state == 5 and reset == true then		F0 = pF_in.e;		reset= false;	else 	if Comb_state == 0 and reset == false then				reset = true;			end;	end;	if lift > 0 then		open = true;		if lift < (w / (sinb*cosb)) then			Area = pi*lift*cosb*(Dv-2*w+lift/2*sin2b);		else if lift <= (((Dp^2 - Ds^2)/(4*(Dv-w)) - w^2)^0.5 + w*tanb) then      	     	Area = pi*(Dv-w)*((lift - w*tanb)^2 + w^2)^0.5;           else          	  	Area = 0.25*pi*(Dp^2 - Ds^2);           end;		end;// Find the Cd at Pr_ref 2.35 (from E. Sher, see above)  		L_Dv = lift/Dv;		Cd = (p1*L_Dv^2 + p2*L_Dv + p3) /               (L_Dv^3 + q1*L_Dv^2 + q2*L_Dv + q3);	else		open = false;   	Cd = 0;   	Area = 0;//		if reset == true then reset = false; end;	end;		if Area == 0 then		dm = 0;		dE = 0;		dm_b = 0;	else		Area = AR*Area;		aa = pp_in.e / pp_out.e;		if (aa > 1) then					p_AV	=pp_in.e; T_AV=pT_in.e; d	= 1; 	a	=aa;					if pF_in.e > 0 then						if inport_open == true then							F_AV = (1-purity)*F0/(purity*F0*fs + 1);						else							F_AV = pF_in.e;						end;					else						F_AV = 0;					end;				else					p_AV	=pp_out.e; T_AV=pT_out.e; F_AV= pF_out.e;	d	=-1; a	=1.0/aa;		end;// Calculate thermodynamic properties from (T,P,x)		inarr_ThermoProp = [p_AV;T_AV;F_AV];		outarr_ThermoProp = dll(dll_ICE,dll_fcn_thdyn, inarr_ThermoProp);			h		= outarr_ThermoProp[4];		rgas	= outarr_ThermoProp[1];		kap		= outarr_ThermoProp[13];			pc = (2.0 / (kap + 1))^(kap / (kap - 1));		c = 1 / pc;		ksim = sqrt(kap * ((2 / (kap + 1))^((kap + 1) / (kap - 1))));		ksin = sqrt(2 * kap / (kap - 1) * (a^(-2 / kap) - a^(-(kap + 1) / kap)));		ksil = 1000 * (a - 1) * sqrt(2 * kap / (kap - 1) * (1.001^(-2 / kap) - 1.001^(-(kap + 1) / kap)));		ksi1 = if (a > c) then ksim 	else ksin end;		ksi = if (a <= 1.001) then					ksil				else 					ksi1				end;//	Correction of Cd to Pr    	Cd = (Cd_corr_coeff[1]*a^2 + Cd_corr_coeff[2]*a + Cd_corr_coeff[3])*Cd;		dm = Cd*Area * p_AV / sqrt(rgas * T_AV) * ksi * d;		if F_AV > 0 then			if inport_open == true then				dm_b = (1-purity)*(F0*fs)/(1+F0*fs)*dm;			else				dm_b = (F_AV*fs)/(1+F_AV*fs)*dm;			end;			else 			dm_b = 0;		end;			dE = dm * h;	end;	pp_in.f = dm;	pp_out.f = dm;	pT_in.f = dE;	pT_out.f = dE;	pF_in.f = dm_b;	pF_out.f = dm_b;implementation_end;]]>
+    </Sidops>
+  </Model>
+</Document>
